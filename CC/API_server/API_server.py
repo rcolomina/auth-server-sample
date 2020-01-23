@@ -17,11 +17,17 @@ def before_request():
     return json.dumps({
       'error': 'Access token does not exist.'
     }), 400
-  
-  access_token = auth_header.split(" ")[1]
 
-  if access_token and verify_access_token(access_token):
-    print("access has been denied")
+  access_token = auth_header.split(" ")[1]
+  
+  token_verified = verify_access_token(access_token)
+  
+
+
+  print(access_token)
+  
+  if access_token and token_verified:
+    print("access has been granted")
   else:
     return json.dumps({
       'error': 'Access token is invalid.'
