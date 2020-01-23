@@ -1,6 +1,5 @@
 import json
 #import ssl
-
 from auth import verify_access_token
 from flask import Flask, request
 
@@ -8,17 +7,21 @@ app = Flask(__name__)
 
 @app.before_request
 def before_request():
-  # Checks if the access token is present and valid. 
-  auth_header = request.headers.get('Authorization')
+  # Checks if the access token is present and valid.
+  auth_header=""
+  if 'Authorization' in request.headers:  
+    auth_header = request.headers.get('Authorization')
+  print(auth_header)
+    
   if 'Bearer' not in auth_header:
     return json.dumps({
       'error': 'Access token does not exist.'
     }), 400
   
-  access_token = auth_header[7:]
+  access_token = auth_header.split(" ")[1]
 
   if access_token and verify_access_token(access_token):
-      pass
+    print("access has been denied")
   else:
     return json.dumps({
       'error': 'Access token is invalid.'
